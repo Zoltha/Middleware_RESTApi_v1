@@ -56,7 +56,7 @@ namespace MiddlewareApp.Services
                 .HandleResult<HttpResponseMessage>(r => 
                     (int)r.StatusCode >= 500 || 
                     r.StatusCode == System.Net.HttpStatusCode.RequestTimeout ||
-                    r.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+                    (int)r.StatusCode == 429)
                 .WaitAndRetryAsync(
                     retryCount: 3,
                     sleepDurationProvider: attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),

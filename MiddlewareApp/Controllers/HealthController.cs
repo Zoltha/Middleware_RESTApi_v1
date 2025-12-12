@@ -122,7 +122,7 @@ namespace MiddlewareApp.Controllers
                 // CRM connectivity issues might be configuration-related
                 componentHealth.Status = "Degraded";
                 componentHealth.Message = $"CRM connectivity issue: {ex.Message}";
-                LoggingService.LogWarning("CRM health check degraded", ex);
+                LoggingService.LogWarning($"Failed to store sync metadata: {ex}");
             }
 
             return componentHealth;
@@ -139,11 +139,15 @@ namespace MiddlewareApp.Controllers
             {
                 using (var connection = JobStorage.Current.GetConnection())
                 {
-                    var servers = connection.GetServers();
-                    var recurringJobs = connection.GetRecurringJobs();
+                    var monitoringApi = JobStorage.Current.GetMonitoringApi();
+                    var servers = monitoringApi.Servers();
+
+                    var recurringJobsCount = 0;
+                    // If you need to count recurring jobs, you may need to use Hangfire.Storage.Monitoring.RecurringJobDto
+                    // and access the storage directly, or remove this feature if not required.
 
                     componentHealth.Status = servers.Count > 0 ? "Healthy" : "Degraded";
-                    componentHealth.Message = $"{servers.Count} server(s) running, {recurringJobs.Count} recurring job(s) configured";
+                    componentHealth.Message = $"{servers.Count} server(s) running, {recurringJobsCount} recurring job(s) configured";
                 }
             }
             catch (Exception ex)

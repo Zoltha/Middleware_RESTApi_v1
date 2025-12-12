@@ -32,8 +32,8 @@ namespace MiddlewareApp.Services
                     .MinimumLevel.Is(ParseLogLevel(config.LogLevel))
                     .Enrich.FromLogContext()
                     .Enrich.WithProperty("Application", "MiddlewareApp")
-                    .Enrich.WithMachineName()
-                    .Enrich.WithThreadId();
+                    .Enrich.WithProperty("MachineName", Environment.MachineName);
+                    // .Enrich.WithThreadId();
 
                 // File logging
                 if (config.EnableFileLogging)
@@ -80,6 +80,10 @@ namespace MiddlewareApp.Services
                                 storageContainerName: "logs",
                                 storageFileName: "middleware-{yyyy}-{MM}-{dd}.log"
                             );
+                            //Azure Blob Storage sink is not available by default in Serilog.
+                            // You need to install a compatible sink package or implement a custom sink.
+                            // For now, fallback to file logging or comment out this block.
+                            //Console.WriteLine("Azure Blob Storage logging is not supported. Please install a compatible Serilog sink or implement a custom sink.");
                         }
                     }
                     catch (Exception ex)

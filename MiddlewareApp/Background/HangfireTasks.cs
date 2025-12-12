@@ -108,7 +108,7 @@ namespace MiddlewareApp.Background
             }
             catch (Exception ex)
             {
-                LoggingService.LogWarning("Failed to store sync metadata", ex);
+                LoggingService.LogWarning($"Failed to store sync metadata: {ex}");
                 // Don't throw - metadata storage is not critical
             }
         }

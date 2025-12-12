@@ -22,7 +22,7 @@ namespace MiddlewareApp
             LoggingService.Initialize();
 
             // Configure Web API
-            GlobalConfiguration.Configure(WebApiConfig.Register);
+            System.Web.Http.GlobalConfiguration.Configure(WebApiConfig.Register);
 
             // Configure Swagger
             SwaggerConfig.Register();
@@ -40,7 +40,7 @@ namespace MiddlewareApp
                 var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["LogDatabase"].ConnectionString;
 
                 // Configure Hangfire to use SQL Server
-                GlobalConfiguration.Configuration
+                Hangfire.GlobalConfiguration.Configuration
                     .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                     .UseSimpleAssemblyNameTypeSerializer()
                     .UseRecommendedSerializerSettings()
